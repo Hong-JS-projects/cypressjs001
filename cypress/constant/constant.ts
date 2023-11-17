@@ -1,4 +1,3 @@
-import { psurl } from "../model";
 
 // Url defaults
 export const PSURL = {

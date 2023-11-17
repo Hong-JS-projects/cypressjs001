@@ -1,40 +1,48 @@
-import { PSURL, InputType, ButtonType, password } from "../constant/constant";
-interface dataLogin {
+import { PSLogin } from "../Interface/login";
+import { InputType } from "../constant/constant";
+
+export class loginController implements PSLogin {
+  domain: string;
   username: string;
-  password?: string;
-}
-
-export class DemoLogin {
-  Login(dataLogin: dataLogin) {
-    cy.visit(PSURL.demo107 + "/login");
-    cy.get(InputType.text).type(dataLogin.username);
-    cy.get(InputType.password).type(dataLogin.password!);
-    cy.get(ButtonType.button).click();
-
+  password: string;
+  button: string;
+  constructor(
+    domain: string,
+    username: string,
+    password: string,
+    button: string
+  ) {
+    this.domain = domain;
+    this.username = username;
+    this.password = password;
+    this.button = button;
   }
-
-  validLogin() {
-    it("Login with valid username and password", () => {
-      this.Login({ username: "testbnd01", password: "1234qwer" });
+  loginWithValidData() {
+    it("should login successfully", () => {
+      cy.visit(this.domain + "/login");
+      cy.get(InputType.text).type(this.username);
+      cy.get(InputType.password).type(this.password);
+      cy.get(this.button).click();
+      cy.wait(4000);
+      cy.url().should('eq', this.domain+'/')
     });
   }
-  invalidPassword() {
-    it("Login with Invalid username and password", () => {
-      this.Login({ username: "testbnd01", password: "1234qwer1" });
+  loginWithInValidData() {
+    it("should login failed", () => {
+      cy.visit(this.domain + "/login");
+      cy.get(InputType.text).type(this.username);
+      cy.get(InputType.password).type('1111');
+      cy.get(this.button).click();
+      cy.url().should('eq', this.domain+'/')
     });
   }
-  invalidUserName() {
-    it("Login with Invalid username and password", () => {
-      this.Login({ username: "testbnd012", password: "1234qwer" });
+  loginWithEmptyData() {
+    it("should fail login with empty", () => {
+      cy.visit(this.domain + "/login");
+      cy.get(InputType.text).type('');
+      cy.get(InputType.password).type('');
+      cy.get(this.button).click();
+      cy.url().should('eq', this.domain+'/')
     });
   }
-}
-
-
-export const BOLogin = ()=>{
-    cy.visit("https://admin-demo-wl.568win.com/login");
-    cy.get(InputType.text).type('KHQADemoTesting')
-    cy.get(InputType.password).type(password)
-    cy.get(ButtonType.submit).click()
-    
 }
