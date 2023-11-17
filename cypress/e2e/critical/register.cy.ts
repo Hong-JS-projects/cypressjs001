@@ -1,10 +1,10 @@
 import { PSURL } from "../../constant/constant";
-import { Register } from "../../controller/PSRegisterCotroller";
+import { Register } from "../../controller/registerController";
 
-import "cypress-xpath";
+
 const register = new Register(
   PSURL.demo185,
-  "testbnd0",
+  "testbnd001",
   "1234qwer",
   "1234qwer"
 );

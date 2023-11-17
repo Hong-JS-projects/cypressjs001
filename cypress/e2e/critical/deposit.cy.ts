@@ -1,4 +1,4 @@
-import { loginController } from "../../controller/loginCotroller";
+import { loginController } from "../../controller/loginController";
 import { PSURL, InputType, ButtonType, password } from "../../constant/constant";
 import "cypress-xpath";
 

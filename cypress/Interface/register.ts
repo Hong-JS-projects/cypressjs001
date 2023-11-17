@@ -1,11 +1,8 @@
-export interface PSRegister {
+import { UserInfo } from "./userInfo";
+
+export interface PSRegister extends UserInfo {
   domain: string;
-  username: string;
-  password: string;
-  confirmPassword: string;
-  currency?: string;
-  phone?: number;
-  email?: string;
+
   RegisterWithValidData(): any;
   RegisterWithInValidData(): any;
   RegisterWithEmptyData(): any;

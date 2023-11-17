@@ -1,8 +1,7 @@
-export interface PSLogin {
+import { UserInfo } from "./userInfo";
+export interface PSLogin extends UserInfo {
   domain: string;
-  username: string;
-  password: string;
-  button:string;
+  button: string;
 
   loginWithValidData(): any;
   loginWithInValidData?(): any;

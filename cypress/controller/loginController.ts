@@ -1,4 +1,5 @@
 import { PSLogin } from "../Interface/login";
+import { UserInfo } from "../Interface/userInfo";
 import { InputType } from "../constant/constant";
 
 export class loginController implements PSLogin {
@@ -6,6 +7,7 @@ export class loginController implements PSLogin {
   username: string;
   password: string;
   button: string;
+
   constructor(
     domain: string,
     username: string,
@@ -17,32 +19,31 @@ export class loginController implements PSLogin {
     this.password = password;
     this.button = button;
   }
+  // Private methods for login
+  private Login(userInfo: UserInfo) {
+    cy.visit(this.domain + "/login");
+    cy.get(InputType.text).type(userInfo.username);
+    cy.get(InputType.password).type(userInfo.password);
+    cy.get(this.button).click();
+    cy.wait(4000);
+    cy.url().should("eq", this.domain + "/");
+  }
+
   loginWithValidData() {
     it("should login successfully", () => {
-      cy.visit(this.domain + "/login");
-      cy.get(InputType.text).type(this.username);
-      cy.get(InputType.password).type(this.password);
-      cy.get(this.button).click();
-      cy.wait(4000);
-      cy.url().should('eq', this.domain+'/')
+      this.Login({ username: this.username, password: this.password });
     });
   }
+
   loginWithInValidData() {
     it("should login failed", () => {
-      cy.visit(this.domain + "/login");
-      cy.get(InputType.text).type(this.username);
-      cy.get(InputType.password).type('1111');
-      cy.get(this.button).click();
-      cy.url().should('eq', this.domain+'/')
+      this.Login({ username: this.username, password: "" });
     });
   }
+
   loginWithEmptyData() {
     it("should fail login with empty", () => {
-      cy.visit(this.domain + "/login");
-      cy.get(InputType.text).type('');
-      cy.get(InputType.password).type('');
-      cy.get(this.button).click();
-      cy.url().should('eq', this.domain+'/')
+      this.Login({ username: "", password: "" });
     });
   }
 }
