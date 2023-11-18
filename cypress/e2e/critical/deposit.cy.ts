@@ -1,27 +1,65 @@
 import { loginController } from "../../controller/loginController";
-import { PSURL, InputType, ButtonType, password } from "../../constant/constant";
+import { BaseURL, ButtonType, password } from "../../constant/constant";
 import "cypress-xpath";
+import { PlayerDeposit } from "../../controller/depositController";
 
-const demoLogin = new loginController(PSURL.demo107, "", "", ButtonType.button);
+const login = new loginController(
+  BaseURL.demo185,
+  { username: "testbnd002", password: password },
+  ButtonType.button
+);
 
-describe("Depost", async () => {
-  beforeEach(() => {
-    // Navigate to 9.1 Deposit page
-    cy.wait(5000);
-    cy.visit(
-      "https://admin-demo-wl.568win.com/goV2/Transaction/Deposit/Waiting"
-    );
-  });
-  it("succeeds when", () => {
-    // Login From player site
-    // demoLogin.Login({ username: "testbnd01", password: "1234qwer" });
-    // cy.wait(2000);
-    // cy.visit(`${PSURL.demo107}/deposit/bank-transfer`);
+const playerDeposit = new PlayerDeposit({
+  amount: 10,
+  bankAccNumber: 423,
+  bankName: "JustTesting",
+});
 
-    // Go to BO and login as company account
-    // cy.wait(10000);
+describe("Depost", () => {
+  it("Depost", () => {
+    login.LoginToken();
+    cy.wait(4000)
+    playerDeposit.PlayerDepost(BaseURL.demo185)
+    cy.wait(4000)
+    login.BOLogin({ username: "KHQADemoTesting", password: "1234qwer" });
 
-    cy.xpath('//button[@type="button"]//span//span[text()="Verify"][1]');
-    // const firstButton = document.querySelector('//button[@class="el-button el-button--success"][1]');
+    cy.wait(4000);
+    cy.visit(BaseURL.boDemo + "/goV2/Transaction/Deposit/Waiting");
+    const getIframeDocument = () => {
+      return (
+        cy
+          .get("iframe")
+          // Cypress yields jQuery element, which has the real
+          // DOM element under property "0".
+          // From the real DOM iframe element we can get
+          // the "document" element, it is stored in "contentDocument" property
+          // Cypress "its" command can access deep properties using dot notation
+          // https://on.cypress.io/its
+          .its("0.contentDocument")
+          .should("exist")
+      );
+    };
+    const getIframeBody = () => {
+      // get the document
+      return (
+        getIframeDocument()
+          // automatically retries until body is loaded
+          .its("body")
+          .should("not.be.undefined")
+          // wraps "body" DOM element to allow
+          // chaining more Cypress commands, like ".find(...)"
+          .then(cy.wrap)
+      );
+    };
+    getIframeBody()
+      .find('button[class="el-button el-button--success"]')
+      .first()
+      .click();
+    // getIframeBody()
+    //   .find(' button[class="el-button el-button--primary"]')
+    //   .should("have.text", "Verified")
+    //   .click();
+
+    // login.LoginToken()
   });
 });

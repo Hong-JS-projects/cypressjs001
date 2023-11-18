@@ -1,6 +1,6 @@
 import { PSLogin } from "../Interface/login";
 import { UserInfo } from "../Interface/userInfo";
-import { InputType } from "../constant/constant";
+import { BaseURL, InputType } from "../constant/constant";
 
 export class loginController implements PSLogin {
   domain: string;
@@ -8,15 +8,10 @@ export class loginController implements PSLogin {
   password: string;
   button: string;
 
-  constructor(
-    domain: string,
-    username: string,
-    password: string,
-    button: string
-  ) {
+  constructor(domain: string, userInfo: UserInfo, button: string) {
     this.domain = domain;
-    this.username = username;
-    this.password = password;
+    this.username = userInfo.username;
+    this.password = userInfo.password;
     this.button = button;
   }
   // Private methods for login
@@ -27,6 +22,9 @@ export class loginController implements PSLogin {
     cy.get(this.button).click();
     cy.wait(4000);
     cy.url().should("eq", this.domain + "/");
+  }
+  LoginToken() {
+    this.Login({ username: this.username, password: this.password });
   }
 
   loginWithValidData() {
@@ -45,5 +43,13 @@ export class loginController implements PSLogin {
     it("should fail login with empty", () => {
       this.Login({ username: "", password: "" });
     });
+  }
+
+  // BO lostin token
+  BOLogin(userInfo: UserInfo) {
+    cy.visit(BaseURL.boDemo + "/login");
+    cy.get('input[name="Username"]').type(userInfo.username);
+    cy.get('input[name="Password"]').type(userInfo.password);
+    cy.get('input[type="submit"]').click();
   }
 }
