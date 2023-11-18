@@ -1,65 +1,37 @@
 import { loginController } from "../../controller/loginController";
-import { BaseURL, ButtonType, password } from "../../constant/constant";
+import { BaseURL, ButtonType, password } from "../../utils/constant";
 import "cypress-xpath";
-import { PlayerDeposit } from "../../controller/depositController";
+import { DepositController } from "../../controller/depositController";
 
+const url: string = BaseURL.demo107;
 const login = new loginController(
-  BaseURL.demo185,
-  { username: "testbnd002", password: password },
+  url,
+  { username: "automatedtest01", password: password },
   ButtonType.button
 );
 
-const playerDeposit = new PlayerDeposit({
-  amount: 10,
+const depost = new DepositController({
+  amount: 2,
   bankAccNumber: 423,
   bankName: "JustTesting",
 });
 
 describe("Depost", () => {
-  it("Depost", () => {
+  beforeEach(() => {
+    // run these tests as if in a desktop
+    // browser with a 720p monitor
+    cy.viewport(1280, 720)
+  })
+  it("Should be able player deposit and operator approved", () => {
     login.LoginToken();
-    cy.wait(4000)
-    playerDeposit.PlayerDepost(BaseURL.demo185)
-    cy.wait(4000)
+    cy.wait(3000);
+    depost.PlayerDepost(url);
+    cy.wait(3000);
     login.BOLogin({ username: "KHQADemoTesting", password: "1234qwer" });
+    // Operator verify and Approve transaction
+    depost.verifyAndApproveDeposit();
 
-    cy.wait(4000);
-    cy.visit(BaseURL.boDemo + "/goV2/Transaction/Deposit/Waiting");
-    const getIframeDocument = () => {
-      return (
-        cy
-          .get("iframe")
-          // Cypress yields jQuery element, which has the real
-          // DOM element under property "0".
-          // From the real DOM iframe element we can get
-          // the "document" element, it is stored in "contentDocument" property
-          // Cypress "its" command can access deep properties using dot notation
-          // https://on.cypress.io/its
-          .its("0.contentDocument")
-          .should("exist")
-      );
-    };
-    const getIframeBody = () => {
-      // get the document
-      return (
-        getIframeDocument()
-          // automatically retries until body is loaded
-          .its("body")
-          .should("not.be.undefined")
-          // wraps "body" DOM element to allow
-          // chaining more Cypress commands, like ".find(...)"
-          .then(cy.wrap)
-      );
-    };
-    getIframeBody()
-      .find('button[class="el-button el-button--success"]')
-      .first()
-      .click();
-    // getIframeBody()
-    //   .find(' button[class="el-button el-button--primary"]')
-    //   .should("have.text", "Verified")
-    //   .click();
-
-    // login.LoginToken()
+    login.LoginToken();
+    cy.visit(url + "/wallet");
   });
 });

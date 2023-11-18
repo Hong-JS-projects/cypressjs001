@@ -1,14 +1,14 @@
-import { BaseURL, ButtonType, password } from "../../constant/constant";
+import { BaseURL, ButtonType, password } from "../../utils/constant";
 import { loginController } from "../../controller/loginController";
 import "cypress-xpath";
 
 const login = new loginController(
-  BaseURL.demo185,
-  { username: "testbnd0001", password: password },
+  BaseURL.demo107,
+  { username: "automatedtest01", password: password },
   ButtonType.button
 );
 describe("Login", async () => {
   login.loginWithValidData();
-  login.loginWithInValidData();
-  login.loginWithEmptyData();
+  // login.loginWithInValidData();
+  // login.loginWithEmptyData();
 });

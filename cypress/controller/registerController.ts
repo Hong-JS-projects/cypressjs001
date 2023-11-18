@@ -1,7 +1,7 @@
 import { PSRegister } from "../Interface/register";
 import { UserInfo } from "../Interface/userInfo";
 
-export class Register implements PSRegister {
+export class RegisterController implements PSRegister {
   domain: string;
   username: string;
   password: string;

@@ -1,6 +1,6 @@
 import { PSLogin } from "../Interface/login";
 import { UserInfo } from "../Interface/userInfo";
-import { BaseURL, InputType } from "../constant/constant";
+import { BaseURL, InputType } from "../utils/constant";
 
 export class loginController implements PSLogin {
   domain: string;
@@ -17,16 +17,16 @@ export class loginController implements PSLogin {
   // Private methods for login
   private Login(userInfo: UserInfo) {
     cy.visit(this.domain + "/login");
+    cy.wait(3000);
     cy.get(InputType.text).type(userInfo.username);
     cy.get(InputType.password).type(userInfo.password);
     cy.get(this.button).click();
-    cy.wait(4000);
+    cy.wait(3000)
     cy.url().should("eq", this.domain + "/");
   }
   LoginToken() {
     this.Login({ username: this.username, password: this.password });
   }
-
   loginWithValidData() {
     it("should login successfully", () => {
       this.Login({ username: this.username, password: this.password });
