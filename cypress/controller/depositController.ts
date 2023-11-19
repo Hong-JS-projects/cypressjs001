@@ -16,7 +16,7 @@ export class DepositController implements Deposit {
 
   playerDeposit(domain: string) {
     cy.visit(domain + "/deposit/bank-transfer");
-    // check if the player used deposited
+    // check if the player has already bank account
     cy.wait(3000);
     cy.get('input[class="el-input__inner"]')
       .eq(0)

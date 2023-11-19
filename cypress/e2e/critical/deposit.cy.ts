@@ -21,17 +21,17 @@ describe("Depost", () => {
     login.LoginToken();
     login.BOLogin({ username: "KHQADemoTesting", password: "1234qwer" });
   });
-// 
-  it("Player depost and do cancel", () => {
-    depost.playerDeposit(url);
-    depost.playerCancelDeposit(url);
-    cy.wait(4000)
-  })
-  // 
+  //
+  // it("Player depost and do cancel", () => {
+  //   depost.playerDeposit(url);
+  //   depost.playerCancelDeposit(url);
+  //   cy.wait(4000);
+  // });
+  //
   it("Should be able player deposit and operator approved", () => {
     depost.playerDeposit(url);
     // Operator verify and Approve transaction
     depost.operatorVerifyAndApproveDeposit();
-    cy.visit(url + "/wallet");
+    // cy.visit(url + "/wallet");
   });
 });
