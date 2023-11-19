@@ -1,14 +1,14 @@
 import { DepositField } from "../Interface/deposit";
 import { BaseURL } from "../utils/constant";
 import { getIframeBody } from "../utils/helper";
-export class DepositController {
-  bName: string;
-  BAN: number;
+export class DepositController implements DepositField {
+  bankName: string;
+  bankAccName: number;
   amount: number;
 
   constructor(deposit: DepositField) {
-    this.bName = deposit.bankName!;
-    this.BAN = deposit.bankAccNumber!;
+    this.bankName = deposit.bankName!;
+    this.bankAccName = deposit.bankAccNumber!;
     this.amount = deposit.amount;
   }
 
@@ -18,12 +18,14 @@ export class DepositController {
     cy.wait(3000);
     cy.get('input[class="el-input__inner"]')
       .eq(0)
-      .then(($bName) => {
-        if ($bName.attr("disabled")) {
+      .then((bName) => {
+        if (bName.attr("disabled")) {
           cy.get('input[class="el-input__inner"]').eq(2).type(`${this.amount}`);
         } else {
-          cy.get('input[class="el-input__inner"]').eq(0).type(this.bName);
-          cy.get('input[class="el-input__inner"]').eq(1).type(`${this.BAN}`);
+          cy.get('input[class="el-input__inner"]').eq(0).type(this.bankName);
+          cy.get('input[class="el-input__inner"]')
+            .eq(1)
+            .type(`${this.bankAccName}`);
           cy.get('input[class="el-input__inner"]').eq(2).type(`${this.amount}`);
         }
       });
