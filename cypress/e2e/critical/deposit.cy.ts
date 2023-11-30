@@ -3,6 +3,7 @@ import { BaseURL, ButtonType, password } from "../../utils/constant";
 import { DepositController } from "../../controller/depositController";
 
 const url: string = BaseURL.demo107;
+
 const login = new loginController(
   url,
   { username: "testbnd04", password: password },
@@ -32,6 +33,7 @@ describe("Depost", () => {
     depost.playerDeposit(url);
     // Operator verify and Approve transaction
     depost.operatorVerifyAndApproveDeposit();
-    // cy.visit(url + "/wallet");
+    // Check amount in player site
+    cy.visit(url + "/wallet");
   });
 });
