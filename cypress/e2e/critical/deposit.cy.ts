@@ -2,16 +2,16 @@ import { loginController } from "../../controller/loginController";
 import { BaseURL, ButtonType, password } from "../../utils/constant";
 import { DepositController } from "../../controller/depositController";
 
-const url: string = BaseURL.demo107;
+const url: string = BaseURL.demo185;
 
 const login = new loginController(
   url,
-  { username: "testbnd04", password: password },
+  { username: "testbnd02", password: password },
   ButtonType.button
 );
 
 const depost = new DepositController({
-  amount: 2,
+  amount: 2.5,
   bankAccNumber: 423,
   bankName: "newAccount",
 });
