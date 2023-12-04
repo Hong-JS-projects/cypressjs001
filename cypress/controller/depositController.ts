@@ -71,5 +71,5 @@ export class DepositController implements Deposit {
   }
 
   //Player reject deposit requested
-  operatorRejectDeposit() {}
+  operatorRejectDeposit() { }
 }
